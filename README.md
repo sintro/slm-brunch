@@ -4,14 +4,14 @@ Adds [Slm](https://github.com/slm-lang/slm) templates support to [brunch](http:/
 
 This plugin can make only static assets compiling (which are in app/assets). Just make valid slim-templates, call it "something**.slim**" or "something**.slm**" and it will be compiled at /public. Of course, there is no sence in trying to embed any locals output in templates, because it is static pages, but it is possible to make a kind of "global" variables for this plugin in its config, which can be rendered in static html pages using Slim syntax (soon). 
 
-One more thing you should know: there is no way to make "pretty" HTML in original **slm-lang** engine (look [here](https://github.com/slm-lang/slm/issues/23)), so all outputted static html-files will be minified. Probably, this can be fixed using some external node.js plugin.
+One more thing you should know: there is no way to make "pretty" HTML in original **slm-lang** engine (look [here](https://github.com/slm-lang/slm/issues/23)), so all outputted static html-files will be minified. Probably, this can be fixed using some external node.js plugin. **Update**: now, tidy-html plugin force HTML to be pretty after compiling, but now it is looks like we can not minify outputted files even when `optimize: true` is set in `brunch-config.js`
 
 ## TODO
 
 - [ ] Add some typical config options (files patterns, global locals, etc)
 - [ ] Check hot-reloading (probably does not work now)
-- [ ] Add the possibility of getting pretty HTMLs
-- [ ] Add js-templates support
+- [x] Add the possibility of getting pretty HTMLs
+- [ ] Add js-templates or angular2 templates support
 - [ ] Or even some direct integration with Slm-lang (without prerendering)? Dont know now if it makes sence.
 - [ ] Add tests?
 - [ ] Publish in NPM 
