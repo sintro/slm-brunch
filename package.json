@@ -16,7 +16,8 @@
   },
   "main": "./lib/index",
   "dependencies": {
-    "slm": "^0.5.1"
+    "slm": "^0.5.1",
+    "htmltidy": "^0.0.6"
   },
   "devDependencies": {
   }

@@ -1,6 +1,14 @@
 compile = require('slm').compile
 path = require('path')
 fs = require('fs')
+tidy = require('htmltidy').tidy
+
+tidy_opts =
+  doctype: 'html5'
+  indent: 'auto'
+  breakBeforeBr: true
+  hideComments: false
+  wrap: 0
 
 # Allows modules included by slm-brunch to be overwritten by
 # a module in the current working directory's ./node_modules.
@@ -17,6 +25,21 @@ localRequire = (module) ->
 
     catch localError
       throw localError
+
+_typeof = if typeof Symbol == 'function' and typeof Symbol.iterator == 'symbol' then ((obj) ->
+  typeof obj
+) else ((obj) ->
+  if obj and typeof Symbol == 'function' and obj.constructor == Symbol and obj != Symbol.prototype then 'symbol' else typeof obj
+)
+
+clone = (obj) ->
+  if null == obj or 'object' != (if typeof obj == 'undefined' then 'undefined' else _typeof(obj))
+    return obj
+  copy = obj.constructor()
+  for attr of obj
+    if obj.hasOwnProperty(attr)
+      copy[attr] = clone(obj[attr])
+  copy
 
 module.exports = class SlmCompiler
   brunchPlugin: yes
@@ -40,7 +63,10 @@ module.exports = class SlmCompiler
           if err 
             throw err
           result = compile(String(data), options)(options.locals)
-          return resolve(result)
+          tidy result, tidy_opts, (err, html) ->
+            if err 
+              throw err
+            resolve(html)
       catch err
         error = reject(err)
 
