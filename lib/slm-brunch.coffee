@@ -1,13 +1,7 @@
-compile = require('slm').compile
+compile = require('slm')
 path = require('path')
 fs = require('fs')
 html = require("html")
-
-_typeof = if typeof Symbol == 'function' and typeof Symbol.iterator == 'symbol' then ((obj) ->
-  typeof obj
-) else ((obj) ->
-  if obj and typeof Symbol == 'function' and obj.constructor == Symbol and obj != Symbol.prototype then 'symbol' else typeof obj
-)
 
 # Allows modules included by slm-brunch to be overwritten by
 # a module in the current working directory's ./node_modules.
@@ -26,13 +20,17 @@ localRequire = (module) ->
       throw localError
 
 clone = (obj) ->
-  if null == obj or 'object' != (if typeof obj == 'undefined' then 'undefined' else _typeof(obj))
+  if obj?
     return obj
   copy = obj.constructor()
   for attr of obj
     if obj.hasOwnProperty(attr)
       copy[attr] = clone(obj[attr])
   copy
+
+compile.template._engine._chain.forEach (e) ->
+  if e.hasOwnProperty('_format')
+    e._format = 'html'
 
 module.exports = class SlmCompiler
   brunchPlugin: yes
@@ -44,20 +42,25 @@ module.exports = class SlmCompiler
     @options = clone(config) || {}
     @options.locals = config.locals || {}
    
-  constructor: (config) ->
-    @setup(config)
+  constructor: (@config) ->
+    @setup(@config)
 
   compileStatic: (data, path, callback) ->
     options = @options
     filepath = data.path
+    prettyResult = ''
     return new Promise (resolve, reject) ->
       try
         fs.readFile filepath, 'utf8', (err, data) ->
-          if err 
-            throw err
-          result = compile(String(data), options)(options.locals)
-          prettyResult = html.prettyPrint(result, {indent_size: 2})
-          resolve(prettyResult)
+          try
+            if err 
+              throw err
+            result = compile.compile(String(data), {})(options.locals)
+            if options.optimize
+              resolve result
+            else
+              resolve html.prettyPrint(result, {indent_size: 2})
+          catch err
+            reject(err)
       catch err
-        error = reject(err)
-
+        reject(err)

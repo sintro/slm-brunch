@@ -1,6 +1,6 @@
 {
   "name": "slm-brunch",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "Adds Slm template engine (Slim without Ruby) support to brunch.",
   "author": "Dmitriy Molodtsov (https://github.com/sintro)",
   "homepage": "https://github.com/sintro/slm-brunch",
@@ -16,7 +16,7 @@
   },
   "main": "./lib/index",
   "dependencies": {
-    "slm": "^0.5.1",
+    "slm-angular2": "git+https://github.com/sintro/slm.git",
     "html": "^1.0.0"
   },
   "devDependencies": {
