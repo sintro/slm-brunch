@@ -1,4 +1,4 @@
-compile = require('slm')
+compile = require('slm-angular2')
 path = require('path')
 fs = require('fs')
 html = require("html")
