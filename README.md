@@ -6,6 +6,28 @@ This plugin can make only static assets compiling for now  (which are in app/ass
 
 There is possibility to use special attributes from Angular2 HTML templates (like `[(ngModel)]="..."` or `#local_variable`) in this plugin\`s Slm engine\`s fork (made by me also). There ase some changes in parsing regexp, which can break or limit the native engine\`s functionality in *rare* cases (and every of them can be avoided easily by using different syntax constructions). Everything is noted in fork\`s README here: https://github.com/sintro/slm.git
 
+
+Static compilation example:
+
+Put your static content into app/assets/your_name.hbs.
+
+Content of file your_name.slm
+
+```html
+h1 = this.title
+```
+
+In config define locals.
+```javascript
+  plugins: {
+    slm: {
+      locals: {
+        title: 'slm-brunch'
+      }
+    }
+  }
+```
+
 ## TODO
 
 - [ ] Add some typical config options (files patterns, global locals, etc)
